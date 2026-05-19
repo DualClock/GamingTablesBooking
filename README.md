@@ -121,10 +121,10 @@ GamingTablesBookingProject/
 │ password  │     │ capacity  │     │ table_id (FK) ──┼──► Tables
 │ role      │     │ status    │     │ date            │
 │ created_at│     └───────────┘     │ time_start      │
-└───────────┘                        │ time_end        │
-                                     │ status          │
-                                     │ created_at      │
-                                     └─────────────────┘
+└───────────┘                       │ time_end        │
+                                    │ status          │
+                                    │ created_at      │
+                                    └─────────────────┘
 ```
 
 ---
