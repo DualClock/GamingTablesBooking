@@ -1,9 +1,9 @@
 # Gaming Tables Booking System
 
 ![.NET](https://img.shields.io/badge/.NET-10.0-blue)
-![Platform](https://img.shields.io/badge/Platform-Windows Forms-green)
-![Database](https://img.shields.io/badge/Database-MS SQL Server-orange)
-![Entity Framework](https://img.shields.io/badge/EF Core-10.0-purple)
+![Platform](https://img.shields.io/badge/Platform-Windows%20Forms-green)
+![Database](https://img.shields.io/badge/Database-MS%20SQL%20Server-orange)
+![Entity Framework](https://img.shields.io/badge/EF%20Core-10.0-purple)
 
 Система бронирования игровых столов - WinForms приложение для учёта и управления бронированиями в игровом клубе.
 
