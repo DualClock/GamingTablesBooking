@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet build)",
+      "Bash(mv AdminRegisterForm.cs AdminRegisterForm_temp.cs)",
+      "Bash(mv AdminRegisterForm.Designer.cs AdminRegisterForm.cs)",
+      "Bash(mv AdminRegisterForm_temp.cs AdminRegisterForm.Designer.cs)"
+    ]
+  }
+}
