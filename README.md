@@ -113,18 +113,18 @@ GamingTablesBookingProject/
 ## Диаграмма базы данных
 
 ```
-┌─────────────┐       ┌─────────────┐       ┌─────────────┐
-│   Users     │       │   Tables    │       │  Bookings   │
-├─────────────┤       ├─────────────┤       ├─────────────┤
-│ id (PK)     │       │ id (PK)     │       │ id (PK)     │
-│ login       │       │ name        │       │ user_id(FK) │──► Users
-│ password    │       │ capacity    │       │ table_id(FK)│──► Tables
-│ role        │       │ status      │       │ date        │
-│ created_at  │       └─────────────┘       │ time_start  │
-└─────────────┘                              │ time_end    │
-                                             │ status      │
-                                             │ created_at  │
-                                             └─────────────┘
+┌───────────┐     ┌───────────┐     ┌─────────────────┐
+│   Users   │     │  Tables   │     │    Bookings     │
+├───────────┤     ├───────────┤     ├─────────────────┤
+│ id (PK)   │     │ id (PK)   │     │ id (PK)         │
+│ login     │     │ name      │     │ user_id (FK) ───┼──► Users
+│ password  │     │ capacity  │     │ table_id (FK) ──┼──► Tables
+│ role      │     │ status    │     │ date            │
+│ created_at│     └───────────┘     │ time_start      │
+└───────────┘                        │ time_end        │
+                                     │ status          │
+                                     │ created_at      │
+                                     └─────────────────┘
 ```
 
 ---
