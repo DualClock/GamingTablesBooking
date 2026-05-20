@@ -1,6 +1,5 @@
 using GamingTablesBookingProject.Data;
 using GamingTablesBookingProject.Models;
-using GamingTablesBookingProject.Utils;
 
 namespace GamingTablesBookingProject.Forms
 {
@@ -15,7 +14,7 @@ namespace GamingTablesBookingProject.Forms
         {
             if (string.IsNullOrWhiteSpace(txtLogin.Text) || string.IsNullOrWhiteSpace(txtPassword.Text))
             {
-                MessageBox.Show("Заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Заполните в��е поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -36,7 +35,7 @@ namespace GamingTablesBookingProject.Forms
             {
                 Login = txtLogin.Text,
                 PasswordHash = txtPassword.Text,
-                Role = "client",
+                Role = "Client",
                 CreatedAt = DateTime.Now
             };
 

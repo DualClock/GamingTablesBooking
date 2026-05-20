@@ -1,6 +1,8 @@
 ﻿using GamingTablesBookingProject.Data;
 using GamingTablesBookingProject.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace GamingTablesBookingProject.Forms
 {
@@ -144,14 +146,26 @@ namespace GamingTablesBookingProject.Forms
             var id = Convert.ToInt32(dgvBookings.SelectedRows[0].Cells["Id"].Value);
             if (MessageBox.Show("Отменить это бронирование?", "Подтверждение", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                using var db = new AppDbContext();
-                var booking = db.Bookings.Find(id);
-                if (booking != null)
+                var connString = @"Data Source=(localdb)\MSSQLLocalDB;Database=GamingTablesBooking;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True";
+                using (var conn = new SqlConnection(connString))
                 {
-                    booking.Status = "Cancelled";
-                    db.SaveChanges();
-                    LoadBookings();
+                    conn.Open();
+                    using (var cmd = new SqlCommand("", conn))
+                    {
+                        cmd.CommandText = "DISABLE TRIGGER ALL ON dbo.Bookings";
+                        cmd.ExecuteNonQuery();
+
+                        cmd.CommandText = @"UPDATE dbo.Bookings SET status = @status WHERE id = @id";
+                        cmd.Parameters.AddWithValue("@status", "Cancelled");
+                        cmd.Parameters.AddWithValue("@id", id);
+                        cmd.ExecuteNonQuery();
+
+                        cmd.Parameters.Clear();
+                        cmd.CommandText = "ENABLE TRIGGER ALL ON dbo.Bookings";
+                        cmd.ExecuteNonQuery();
+                    }
                 }
+                LoadBookings();
             }
         }
 

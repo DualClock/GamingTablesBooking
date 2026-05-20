@@ -19,7 +19,6 @@ namespace GamingTablesBookingProject.Forms
             _existingTableId = table.Id;
             InitializeComponent();
             txtName.Text = table.Name;
-            // Status хранится в lowercase (available/maintenance), convert for display
             cmbStatus.SelectedItem = table.Status.ToLower();
             lblTitle.Text = "Редактирование стола";
         }
@@ -49,7 +48,7 @@ namespace GamingTablesBookingProject.Forms
                 var table = new GameTable
                 {
                     Name = txtName.Text,
-                    Capacity = 4, // Значение по умолчанию
+                    Capacity = 4, 
                     Status = cmbStatus.SelectedItem?.ToString() ?? "available"
                 };
                 db.Tables.Add(table);

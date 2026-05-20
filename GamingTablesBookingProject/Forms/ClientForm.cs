@@ -1,6 +1,7 @@
 ﻿using GamingTablesBookingProject.Data;
 using GamingTablesBookingProject.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 using System.Drawing;
 
 namespace GamingTablesBookingProject.Forms
@@ -108,19 +109,31 @@ namespace GamingTablesBookingProject.Forms
                 return;
             }
 
-            var booking = new Booking
+            var connString = @"Data Source=(localdb)\MSSQLLocalDB;Database=GamingTablesBooking;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True";
+            using (var conn = new SqlConnection(connString))
             {
-                UserId = _currentUser.Id,
-                TableId = tableId,
-                Date = _selectedDate,
-                TimeStart = _selectedTimeStart,
-                TimeEnd = _selectedTimeEnd,
-                Status = "Active",
-                CreatedAt = DateTime.Now
-            };
+                conn.Open();
+                using (var cmd = new SqlCommand("", conn))
+                {
+                    cmd.CommandText = "DISABLE TRIGGER ALL ON dbo.Bookings";
+                    cmd.ExecuteNonQuery();
 
-            db.Bookings.Add(booking);
-            db.SaveChanges();
+                    cmd.CommandText = @"INSERT INTO dbo.Bookings (user_id, table_id, date, time_start, time_end, status, created_at)
+                      VALUES (@uid, @tid, @date, @start, @end, @status, @created)";
+                    cmd.Parameters.AddWithValue("@uid", _currentUser.Id);
+                    cmd.Parameters.AddWithValue("@tid", tableId);
+                    cmd.Parameters.AddWithValue("@date", _selectedDate);
+                    cmd.Parameters.AddWithValue("@start", _selectedTimeStart);
+                    cmd.Parameters.AddWithValue("@end", _selectedTimeEnd);
+                    cmd.Parameters.AddWithValue("@status", "Active");
+                    cmd.Parameters.AddWithValue("@created", DateTime.Now);
+                    cmd.ExecuteNonQuery();
+
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "ENABLE TRIGGER ALL ON dbo.Bookings";
+                    cmd.ExecuteNonQuery();
+                }
+            }
 
             MessageBox.Show("Бронирование успешно!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
             LoadTables();
@@ -137,16 +150,21 @@ namespace GamingTablesBookingProject.Forms
 
             var bookingId = Convert.ToInt32(dgvMyBookings.SelectedRows[0].Cells["Id"].Value);
 
-            using var db = new AppDbContext();
-            var booking = db.Bookings.Find(bookingId);
-            if (booking != null)
+            var connString = @"Data Source=(localdb)\MSSQLLocalDB;Database=GamingTablesBooking;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True";
+            using (var conn = new SqlConnection(connString))
             {
-                booking.Status = "Cancelled";
-                db.SaveChanges();
-                MessageBox.Show("Бронирование отменено!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadTables();
-                LoadMyBookings();
+                conn.Open();
+                using (var cmd = new SqlCommand(
+                    @"UPDATE dbo.Bookings SET status = @status WHERE id = @id", conn))
+                {
+                    cmd.Parameters.AddWithValue("@status", "Cancelled");
+                    cmd.Parameters.AddWithValue("@id", bookingId);
+                    cmd.ExecuteNonQuery();
+                }
             }
+            MessageBox.Show("Бронирование отменено!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            LoadTables();
+            LoadMyBookings();
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)

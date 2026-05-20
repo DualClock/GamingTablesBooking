@@ -13,9 +13,8 @@ namespace GamingTablesBookingProject.Forms
         private void btnLogin_Click(object sender, EventArgs e)
         {
             using var db = new AppDbContext();
-            var user = db.Users.FirstOrDefault(u => u.Login == txtLogin.Text && u.PasswordHash == txtPassword.Text);
-
-            if (user != null)
+            var user = db.Users.FirstOrDefault(u => u.Login == txtLogin.Text);
+            if (user != null && txtPassword.Text == user.PasswordHash)
             {
                 this.Hide();
                 Form? userForm = null;
